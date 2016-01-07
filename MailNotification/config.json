@@ -1,0 +1,6 @@
+{
+        "account": "account",
+        "password": "pass",
+        "host": "smtp.qq.com",
+        "postfix": "@qq.com"
+}
