@@ -1,0 +1,62 @@
+            <en-note>
+                <div>
+                    <span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+                        <strong>
+                            <span style="font-size: 19px;">
+                                [^month] [^day] (Week [^week])
+                            </span>
+                        </strong>
+                    </span>
+                </div>
+                <div style="margin-left: 40px;">
+                    <br clear="none"/>
+                </div>
+
+                <div style="margin-left: 40px;">
+                    <span style="font-size: large;">Monday </span> [^0]
+                </div>
+                <div style="margin-left: 80px;">
+                    <br clear="none"/>
+                </div>
+                <div style="margin-left: 40px;">
+                    <span style="font-size: large;">Tuesday </span> [^1]
+                </div>
+                <div style="margin-left: 80px;">
+                    <br clear="none"/>
+                </div>
+                <div style="margin-left: 40px;">
+                    <span style="font-size: large;">Wednesday </span> [^2]
+                </div>
+                <div style="margin-left: 80px;">
+                    <br clear="none"/>
+                </div>
+                <div style="margin-left: 40px;">
+                    <span style="font-size: large;">Thursday </span> [^3]
+                </div>
+                <div style="margin-left: 80px;">
+                    <br clear="none"/>
+                </div>
+                <div style="margin-left: 40px;">
+                    <span style="font-size: large;">Friday </span> [^4]
+                </div>
+                <div style="margin-left: 80px;">
+                    <br clear="none"/>
+                </div>
+                <div style="margin-left: 40px;">
+                    <span style="font-size: large;">Saturday </span> [^5]
+                </div>
+                <div style="margin-left: 80px;">
+                    <br clear="none"/>
+                </div>
+                <div style="margin-left: 40px;">
+                    <span style="font-size: large;">Sunday </span> [^6]
+                </div>
+                <div style="margin-left: 80px;">
+                    <br clear="none"/>
+                </div>
+                <div>
+                    <span style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">之后的时间
+                    </span>
+                </div>
+                <div style="border: none; padding: 0px; margin: 0px 0px 0px 40px;">sth</div>
+            </en-note>
