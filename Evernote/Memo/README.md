@@ -18,3 +18,30 @@
     注意事项：
         Memo格式可以通过修改 'content.enex' 更改
         这只是一个空白模板，具体内容要自己往里填哟
+
+#PackMemo 160112
+    Aimed at:
+        Pack the Memo of last week to specific position if there is one
+        Replace the old Memo with a new one
+    Environment:
+        Windows 8.1 - 64
+        Python 2.7.10
+        EvernoteController.py
+        Memo.py
+    Attention:
+        You should fill in your dev_token in EvernoteController.py before using this
+        The position of Memo and packing memo can be changed with the settings
+        Though runs well with this program, there's a bug in EvernoteController.py on local storage about notes with same name
+
+    目标：
+        将上周的Memo备份到相应的位置（如果有的话）
+        用一份空白Memo替代旧Memo
+    环境：
+        Windows 8.1 - 64
+        Python 2.7.10
+        EvernoteController.py
+        Memo.py
+    注意事项：
+        在使用这一程序之前，请确保EvernoteController.py中的dev_token已经赋值
+        Memo位置与Memo备份位置都可以通过修改配置更改
+        虽然不影响使用，但实际上目前版本的EvernoteController.py的离线存储不能很好的处理同名笔记
