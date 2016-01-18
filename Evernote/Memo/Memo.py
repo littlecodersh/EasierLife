@@ -23,7 +23,8 @@ class Memo:
         else:
             self.now -= datetime.timedelta(days = self.now.weekday())
         self.dataList['day'] = self.now.strftime('%d')
-        self.dataList['week'] = str((self.now - FIRST_MONDAY_DATE).days / 7 + 1)
+        # self.dataList['week'] = str((self.now - FIRST_MONDAY_DATE).days / 7 + 1)
+        self.dataList['week'] = self.now.strftime('%U')
         for i in range(7): 
             self.dataList[str(i)] = (self.now + datetime.timedelta(days = i) - datetime.timedelta(self.now.weekday())).strftime('%y%m%d')
     def update_template(self):

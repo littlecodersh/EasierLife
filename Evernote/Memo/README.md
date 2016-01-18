@@ -31,7 +31,7 @@
     Attention:
         You should fill in your dev_token in EvernoteController.py before using this
         The position of Memo and packing memo can be changed with the settings
-        Though runs well with this program, there's a bug in EvernoteController.py on local storage about notes with same name
+        You can see how to use this on http://v.youku.com/v_show/id_XMTQ0OTExNzk5Ng==
 
     目标：
         将上周的Memo备份到相应的位置（如果有的话）
@@ -44,4 +44,4 @@
     注意事项：
         在使用这一程序之前，请确保EvernoteController.py中的dev_token已经赋值
         Memo位置与Memo备份位置都可以通过修改配置更改
-        虽然不影响使用，但实际上目前版本的EvernoteController.py的离线存储不能很好的处理同名笔记
+        你能在优酷上观看演示:http：//v.youku.com/v_show/id_XMTQ0OTExNzk5Ng==

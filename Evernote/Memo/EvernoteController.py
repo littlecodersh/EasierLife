@@ -9,18 +9,18 @@ from evernote.api.client import EvernoteClient
 
 # * If you are international user, replace all the yinxiang with evernote
 
-SANDBOX = True
-SERVICE_HOST = 'sandbox.evernote.com'
-# SANDBOX = False
-# SERVICE_HOST = 'app.yinxiang.com' 
+# SANDBOX = True
+# SERVICE_HOST = 'sandbox.evernote.com'
+SANDBOX = False
+SERVICE_HOST = 'app.yinxiang.com' 
 
 # * If you are international user, replace all the yinxiang with evernote
 
 # You can get this from 'https://%s/api/DeveloperToken.action'%SERVICE_HOST >>
-# SPECIAL_DEV_TOKEN = True
-# DEV_TOKEN = 'S=s1:U=91eca:E=1597e03fc37:C=1522652ce38:P=1cd:A=en-devtoken:V=2:H=070ca57b************************'
-SPECIAL_DEV_TOKEN = False
+SPECIAL_DEV_TOKEN = True
 DEV_TOKEN = ''
+# SPECIAL_DEV_TOKEN = False
+# DEV_TOKEN = ''
 # In China it's https://app.yinxiang.com/api/DeveloperToken.action <<
 
 LOCAL_STORAGE = False
