@@ -6,7 +6,7 @@
         Windows 8.1 - 64
         Python 2.7.10
     Attention:
-        Only ascii input is supported currently
+        Mac is not supported currently
         more than 50 letters on one line will result into residual letters
 
     目标：
@@ -16,5 +16,5 @@
         Windows 8.1 - 64
         Python 2.7.10
     注意事项：
-        目前仅支持ascii输入
-        单行超过五十个字符会出现残留字符问题
+        目前Mac电脑暂时无法支持
+        单行超过五十个字符（二十五个中文）会出现残留字符问题

@@ -1,6 +1,26 @@
 #coding=utf8
 import thread, time, sys
-import msvcrt
+
+try:
+    import termios, tty
+    termios.tcgetattr, termios.tcsetattr
+except (ImportError, AttributeError):
+    try:
+        import msvcrt
+    except ImportError:
+        raise Exception('Mac is currently not supported')
+    else:
+        getch = msvcrt.getwch
+else:
+    def fn():
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        tty.setraw(fd)
+        ch = sys.stdin.read(1)
+        if ord(ch)>=256: ch += sys.stdin.read(1)
+        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+    getch = fn
 
 class ChatLikeCMD():
     def __init__(self, header = 'LittleCoder', symbol = '>', inputMaintain = False):
@@ -15,8 +35,9 @@ class ChatLikeCMD():
         sys.stdout.write(self.header + self.symbol)
         if self.strBuff:
             for i in self.strBuff: sys.stdout.write(i)
+        sys.stdout.flush()
     def getch(self):
-        c = msvcrt.getch()
+        c = getch()
         return c if c != '\r' else '\n'
     def print_thread(self):
         while self.isLaunch:
@@ -24,6 +45,9 @@ class ChatLikeCMD():
                 sys.stdout.write('\r' + ' ' * 50 + '\r')
                 sys.stdout.flush()
                 print self.inPip.pop()
+                # linux special
+                sys.stdout.write('\r')
+                sys.stdout.flush()
                 self.reprint_input()
     def command_thread(self):
         c = None

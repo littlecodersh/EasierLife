@@ -1,6 +1,9 @@
+#coding=utf8
 from PIL import Image 
 import sys
 
+PLATFORM = 'Windows'
+BLOCK = '\xA1\xF6' if PLATFORM == 'Windows' else 'MM'
 
 class QRCode():
     def __init__(self, fileName, size, padding = 0, background = 'BLACK'):
@@ -9,8 +12,8 @@ class QRCode():
         self.img = Image.open(fileName)
         self.times = self.img.size[0]/(size + padding * 2)
         self.rgb = self.img.convert('RGB')
-        self.white = '\xA1\xF6' if background == 'BLACK' else '  '
-        self.black = '  ' if background == 'BLACK' else '\xA1\xF6'
+        self.white = BLOCK if background == 'BLACK' else '  '
+        self.black = '  ' if background == 'BLACK' else BLOCK
     def print_qr(self):
         print self.white * (self.size + 2)
         startPoint = self.padding + 0.5
