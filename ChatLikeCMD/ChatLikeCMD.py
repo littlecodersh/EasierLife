@@ -23,9 +23,9 @@ else:
     getch = fn
 
 class ChatLikeCMD():
-    def __init__(self, header = 'LittleCoder', symbol = '>', inputMaintain = False):
+    def __init__(self, header = 'LittleCoder', symbol = '>', inPip = None, inputMaintain = False):
         self.strBuff = []
-        self.inPip = []
+        if not inPip: self.inPip = inPip
         self.outPip = []
         self.isLaunch = False
         self.header = header
@@ -53,13 +53,24 @@ class ChatLikeCMD():
         c = None
         while self.isLaunch:
             c = self.getch()
-            if c == '\b':
-                sys.stdout.write('\b \b')
-                self.strBuff.pop()
-            elif c == chr(3):
+            if c == chr(27):
+                sys.stdout.write('\r' + ' ' * 50 + '\r')
+                sys.stdout.flush()
+                self.reprint_input()
+                self.outPip.append(c)
+            elif c == '\b': # Backspace
+                # Chinese \b problems when using input method 
+                if self.strBuff: 
+                    sys.stdout.write('\b \b')
+                    self.strBuff.pop()
+            elif c == chr(3): # Ctrl+C
                 self.stop()
             elif c == '\n':
-                if self.inputMaintain: sys.stdout.write(c)
+                if self.inputMaintain: 
+                    sys.stdout.write(c)
+                else:
+                    sys.stdout.write('\r' + ' ' * 50 + '\r')
+                sys.stdout.flush()
                 self.reprint_input()
                 self.outPip.append(''.join(self.strBuff))
                 self.strBuff = []
@@ -81,8 +92,9 @@ class ChatLikeCMD():
         self.inPip.append(msg)
     def get_command_pip(self):
         return self.outPip
+    def set_header(self, header):
+        self.header = header
 
-        
 if __name__ == '__main__':
     c = ChatLikeCMD()
     s = c.get_command_pip()
