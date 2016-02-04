@@ -6,7 +6,7 @@
         Windows 8.1 - 64
         Python 2.7.10
     Attention:
-        Mac is not supported currently
+        some Mac is not supported currently
         more than 50 letters on one line will result into residual letters
 
     目标：
@@ -16,5 +16,5 @@
         Windows 8.1 - 64
         Python 2.7.10
     注意事项：
-        目前Mac电脑暂时无法支持
+        目前一些Mac电脑暂时无法支持
         单行超过五十个字符（二十五个中文）会出现残留字符问题
