@@ -1,10 +1,10 @@
 import xlrd, xlwt
 
 class ExcelClient:
-    def __init__(self, sourceDir, outputDir, sourceIndex, outputHeader):
+    def __init__(self, sourceDir = None, outputDir = None, sourceIndex = None, outputHeader = None):
         self.sourceDir = sourceDir
-        self.outputDir = outputDir
-        self.source = self.getSource(sourceIndex)
+        self.outputDir = outputDir if outputDir else 'DemoExcelClientOutput.xls'
+        self.source = self.getSource(sourceIndex) if sourceIndex else None
         self.output = self.setOutput()
         self.storeData(outputHeader)
     def getSource(self, dataRange): # content will be the first
@@ -27,7 +27,7 @@ class ExcelClient:
     def getData(self):
         try:
             return self.source.next()
-        except StopIteration:
+        except StopIteration, AttributeError:
             return None
     def storeData(self, data):
         self.outputData = data
