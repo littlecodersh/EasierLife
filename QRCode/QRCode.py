@@ -1,9 +1,10 @@
-#coding=utf8
 from PIL import Image 
-import sys
+import sys, os
+import config
 
-PLATFORM = 'Windows'
-BLOCK = '\xA1\xF6' if PLATFORM == 'Windows' else 'MM'
+QR_DIR = config.QR_DIR
+OS = config.OS
+BLOCK = '\xA1\xF6' if OS == 'Windows' else 'MM'
 
 class QRCode():
     def __init__(self, fileName, size, padding = 0, background = 'BLACK'):
@@ -13,8 +14,10 @@ class QRCode():
         self.times = self.img.size[0]/(size + padding * 2)
         self.rgb = self.img.convert('RGB')
         self.white = BLOCK if background == 'BLACK' else '  '
-        self.black = '  ' if background == 'BLACK' else BLOCK
+        self.black = '  ' if background == 'BLACK' else BLOCK 
     def print_qr(self):
+        sys.stdout.write(' '*50 + '\r')
+        sys.stdout.flush()
         print self.white * (self.size + 2)
         startPoint = self.padding + 0.5
         for y in range(self.size):
@@ -26,5 +29,6 @@ class QRCode():
         print self.white * (self.size + 2)
 
 if __name__ == '__main__':
-    q = QRCode('QR.jpg', 37, 3, 'BLACK')
+    # 37 is for picture size without padding, 3 is padding
+    q = QRCode(os.path.join(QR_DIR, 'QR.jpg'), 37, 3, 'BLACK')
     q.print_qr()
