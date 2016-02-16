@@ -1,0 +1,12 @@
+{
+        "userID": "*************",
+        "password": "********",
+        "host": "****************",
+        "postfix": "qq.com",
+        "baseUrl": "127.0.0.1",
+        "xmlInput": "atta.xml",
+        "metaStorage": "mailinfo.xls",
+        "uploadFile": "upload.xls",
+        "userNameStorage": "userNameStorage.xls",
+        "caseStorage": "cases.xlsx"
+}

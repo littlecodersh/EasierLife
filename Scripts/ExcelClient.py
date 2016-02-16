@@ -1,3 +1,8 @@
+#coding = utf8
+'''
+getData()    returns a LIST contains a row in order
+storeData()  stores a LIST contains a row in order
+'''
 import xlrd, xlwt
 
 class ExcelClient:
@@ -24,18 +29,19 @@ class ExcelClient:
                 yield True
             else:
                 yield False
-    def getData(self):
+    def getData(self): # returns a LIST contains a row in order
         try:
             return self.source.next()
         except StopIteration, AttributeError:
             return None
-    def storeData(self, data):
+    def storeData(self, data): # stores a LIST contains a row in order
         self.outputData = data
         return self.output.next()
 
 if __name__ == '__main__':
-    ec = ExcelClient('1.xlsx', 'metaData.xls', (2, 6, 5, 0, 1), ['sender', 'time', 'receiver', 'topic', 'content'])
+    iec = ExcelClient(sourceDir = '1.xlsx', sourceIndex = (0,1))
+    oec = ExcelClient(outputDir = '1.xlsx', outputHeader = ['subject', 'time'])
     for i in range(3):
-        data = ec.getData()
-        ec.storeData(data)
+        data = iec.getData()
+        oec.storeData(data)
 
