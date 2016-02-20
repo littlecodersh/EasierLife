@@ -29,21 +29,24 @@ class LogClient:
             data = payloads, headers = headers)
         return r.url
     def upload_log(self, clientId, caseId, date, description):
-        payloads = {
-            'RegisterType': 'NEW',
-            'wl_category' : '0',
-            'wl_client_id' : clientId,
-            'wl_case_id' : caseId,
-            'wl_empl_id' : '111',
-            'wl_work_type': '01',
-            'wl_date': date,
-            'wl_own_hours': '0',
-            'wl_start_date': '09:00',
-            'wl_description': description.encode('gbk'),}
-        headers = { 'Content-Type': 'application/x-www-form-urlencoded', }
-        r = self.s.post(self.baseUrl + '/worklog/WorklogSave.asp', data = payloads, headers = headers)
+        try:
+            payloads = {
+                'RegisterType': 'NEW',
+                'wl_category' : '0',
+                'wl_client_id' : clientId,
+                'wl_case_id' : caseId,
+                'wl_empl_id' : '111',
+                'wl_work_type': '01',
+                'wl_date': date,
+                'wl_own_hours': '0',
+                'wl_start_date': '09:00',
+                'wl_description': description.encode('gbk'),}
+            headers = { 'Content-Type': 'application/x-www-form-urlencoded', }
+            r = self.s.post(self.baseUrl + '/worklog/WorklogSave.asp', data = payloads, headers = headers)
+            return True if 'document.frmWorklog.submit' in r.text else False
+        except:
+            return False
 
 if __name__ == '__main__':
     lc = LogClient()
-    lc.upload_log('0210340', '021G20110002', '2016-2-3', u'测试')
-
+    r = lc.upload_log('0210340', '021G20110002', '2016-2-3', u'测试')

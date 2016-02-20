@@ -6,6 +6,8 @@
         Windows 8.1 - 64
         Python 2.7.10
     Attention:
+        Put the xml format attachment list in root path as atta.xml
+        Fill in sheets in infolist path
         Use producexml.py, makeuploadfile.py, uploadlog.py in this order
         Follow the instruction to modify input and output files
 
@@ -16,5 +18,7 @@
         Windows 8.1 - 64
         Python 2.7.10
     注意事项：
+        将OutlookAttachView导出的xml形式附件列表改为atta.xml放入目录
+        填写完成infolist文件夹中的各项数据
         依次使用producexml.py, makeuploadfile.py, uploadlog.py
         按照说明修改输入输出文件
