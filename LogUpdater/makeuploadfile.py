@@ -29,9 +29,11 @@ if __name__ == '__main__':
         outputList = []
         for key, value in caseDict.items():
             if '' != mailInfo[3] == key:
+                def clear_colon(s):
+                    return s.encode('utf8').split(':')[-1].split('：')[-1].replace(' ', '').decode('utf8')
                 outputList = sum([outputList, [value[0], value[1], mailInfo[2].replace('/','-').split(' ')[0],
-                    u'与{0}就{1}进行沟通，并发送{2}给{0}。'.format(mailInfo[0], mailInfo[1],
-                        mailInfo[4].encode('utf8').split(':')[-1].split('：')[-1].decode('utf8'))]], [])
+                    u'与{0}就{2}进行沟通，并发送{1}给{0}。'.format(mailInfo[0], clear_colon(mailInfo[1]), clear_colon(mailInfo[4]))]
+                    ], [])
         if not outputList: unfoundList.append(str(mailInfo[3]))#print('Case on {} not found'.format(mailInfo[2]))
         oec.storeData(outputList)
     if unfoundList: print 'Cases not found: ' + ', '.join(list(set(unfoundList)))
