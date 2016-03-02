@@ -4,26 +4,6 @@ import json, sys
 DEFAULT_CONFIG = {'host': '127.0.0.1', 'port': 3306, 'user': 'root', 'passwd': 'root', 'db': 'witcampus', 'charset': 'utf8'}
 MAX_NUM = int(1e5)
 
-def source_function(fn, *args, **kwargs): # get a iter item fn and return a function to get data one at a time
-    def wrapped(*args, **kwargs):
-        s = fn(*args, **kwargs)
-        def return_item():
-            try:
-                return s.next()
-            except StopIteration:
-                return None
-        return return_item
-    return wrapped
-def get_data_from_source(r): # get a function returns a data one at a time and a funtion deals with it, get everything done
-    def source(fn, *args, **kwargs):
-        def wrapped(*args, **kwargs):
-            while 1:
-                data = r()
-                if data is None: break
-                fn(data, *args, **kwargs)
-        return wrapped
-    return source
-
 class MysqlClient:
     def __init__(self, **config):
         if not config: config = DEFAULT_CONFIG
@@ -51,9 +31,7 @@ class MysqlClient:
         count = 0
         totalCount = 0
         process = -1
-        while 1:
-            data = s()
-            if data is None: break
+        for data in s:
             insertSql = 'insert into %s values (%s)'%(restructedTableName, ', '.join(['%s' for i in range(len(data))]))
             self._cursor.execute(insertSql, data)
             count += 1
@@ -68,12 +46,10 @@ class MysqlClient:
         self._connection.commit()
         print 'Restructuring Finished'
         return restructedTableName
-    @source_function
     def simple_data_source(self, sql): # return a function to provide one data at a time
         c = self._connection.cursor()
         c.execute(sql)
         for item in c.fetchall(): yield item
-    @source_function
     def parallel_get_source_of_data_source(self, sql, beginNumber = 0):
         regex = re.compile('from (\S+)')
         tableName = re.findall(regex, sql)[0]
@@ -89,30 +65,20 @@ class MysqlClient:
             self._storedDataSource = None
             thread.start_new_thread(get, (i,))
             yield r
-    @source_function
     def data_source(self, sql): # limit is now useless here
         regex = re.compile('(select .*? from .*?)(?: limit (\S+),.*)?$')
         r = re.findall(regex, sql)[0]
         sourceOfDataSource = self.parallel_get_source_of_data_source(r[0], int(r[1]) if r[1] else 0)
-        # I failed to use get_data_from_source here and don't know why
-        while 1:
-            dataSource = sourceOfDataSource()
-            if dataSource is None: break
-            while 1:
-                data = dataSource()
-                if data is None: break
-                yield data
+        for dataSource in sourceOfDataSource:
+            for data in dataSource: yield data
 
 if __name__ == '__main__':
     mc = MysqlClient()
-    # mc.restruct_table('device', [('dev_id',''), ('node_des','desc')])
+    mc.restruct_table('device', [('dev_id',''), ('node_des','desc')])
 
     # a = {'a':'1',}
     # import datetime
     # mc.insert_data('acrecenv', ['json', datetime.datetime.now(), MySQLdb.escape_string(json.dumps(a))])
 
-    r = mc.data_source('select * from dev_loc order by node_id limit 300, 100')
-    @get_data_from_source(r)
-    def p(data): print str(data)
-    p()
-
+    # r = mc.data_source('select * from dev_loc order by node_id limit 300, 100')
+    # for item in r: print item
