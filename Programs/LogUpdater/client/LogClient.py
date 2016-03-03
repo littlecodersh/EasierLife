@@ -1,27 +1,23 @@
 #coding=utf8
-import requests, json
+import requests, os, re
+
+DEBUG = False
 
 class LogClient:
-    def __init__(self):
+    def __init__(self, userID, password, baseUrl):
+        self.userID = userID
+        self.password = password
+        self.baseUrl = baseUrl
         self.s = requests.Session()
         self.set_env()
         self.read_in_personal_info()
-        while not self.login(): pass
-        print 'Login Succeed'
+        if not self.login(): os._exit()
+        self.get_view_settings()
     def set_env(self):
         self.headers = {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.8,zh-Hans-CN;q=0.5,zh-Hans;q=0.3',
+            'User-Agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; InfoPath.3; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729)',
             'Content-Type': 'application/x-www-form-urlencoded', }
-    def read_in_personal_info(self):
-        with open('config.json') as f:
-            try:
-                personal_info = json.loads(f.read())
-                self.userID = personal_info['userID']
-                self.password = personal_info['password']
-                self.baseUrl = personal_info['baseUrl']
-            except:
-                print 'Load personal data failed, please check config.json'
     def login(self):
         def try_login():
             payloads = {
@@ -38,16 +34,21 @@ class LogClient:
             self.emplId = cookiesList['User']
             return True
         print 'UserId or Password is incorrect'
-        ans = raw_input('Change the config.json or [q]uit: ')
-        if ans == 'q': raise Exception('User choose to quit')
-        self.read_in_personal_info()
         return False
+    def get_view_settings(self):
+        r = self.s.get(self.baseUrl + '/worklog/worklogregister.aspx', headers = self.headers)
+        regex = {
+            '__VIEWSTATE': 'id="__VIEWSTATE" value="(.*?)" />',
+            '__VIEWSTATEGENERATOR': 'id="__VIEWSTATEGENERATOR" value="(.*?)" />',
+            '__EVENTVALIDATION': 'id="__EVENTVALIDATION" value="(.*?)" />', }
+        for key, value in regex.items(): regex[key] = re.compile(value)
+        self.viewSetting = {key: re.findall(value, r.text) for key, value in regex.items()}
     def upload_log(self, clientId, caseId, date, description, hours = 0):
         try:
             payloads = {
-                '__VIEWSTATE': '/wEPDwULLTE5NjYzNTQyNjJkZEmpSJnpIAxLpnCxj19EhiWWhyZe',
-                '__VIEWSTATEGENERATOR': '2A830DFF',
-                '__EVENTVALIDATION': '/wEWAgLWj8zjAQKVsJOsD2f8q58shkx5+PhMa3WQ3eQsx10v',
+                "__VIEWSTATE": self.viewSetting['__VIEWSTATE'],
+                '__VIEWSTATEGENERATOR': self.viewSetting['__VIEWSTATEGENERATOR'],
+                "__EVENTVALIDATION": self.viewSetting['__EVENTVALIDATION'],
                 'temp_hour1': '0',
                 'temp_minute1': '0',
                 'temp_hour2': '0',
@@ -63,10 +64,12 @@ class LogClient:
                 'wl_own_hours': hours,
                 'wl_description': description.encode('gbk'), }
             r = self.s.post(self.baseUrl + '/worklog/worklogregister.aspx', data = payloads, headers = self.headers)
+            if DEBUG:
+                with open('debug.htm','w') as f: f.write(r.content)
             return True if 'document.frmSaveSubmit.submit' in r.text else False
         except:
             return False
 
 if __name__ == '__main__':
     lc = LogClient()
-    r = lc.upload_log('0210866', '021M20140034', '2016-3-1', u'测试')
+    r = lc.upload_log('0210866', '021M20140034', '2016-3-1', u'测试', 0)

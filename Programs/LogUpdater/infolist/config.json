@@ -1,0 +1,11 @@
+{
+        "userID": "**********",
+        "password": "**********",
+        "baseUrl": "http://192.168.1.1",
+        "userNameStorage": "userNameStorage.xls",
+        "caseStorage": "cases.xlsx",
+        "xmlInput": "atta.xml",
+        "metaStorage": "mailinfo.xls",
+        "uploadFile": "upload.xls",
+        "debugFile": "debugFile.xls"
+}
