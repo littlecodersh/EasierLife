@@ -18,8 +18,8 @@ class Sqlite3Client:
         self._cursor.execute(sql)
         return self._cursor.fetchall()
     def insert_data(self, tableName, items = []):
-        items = ['"%s"'%item for item in items]
-        self._cursor.execute('insert into %s values(%s)'%(tableName,', '.join(items)))
+        self._cursor.execute('insert into %s values(%s)'%(tableName,
+            ', '.join(['?' for i in items])), items)
         self._connection.commit()
     def restruct_table(self, tableName, orderBy, restructedTableName = None):
         if restructedTableName is None: restructedTableName = 'restructed_' + tableName
@@ -32,8 +32,7 @@ class Sqlite3Client:
         totalCount = 0
         process = -1
         for data in s:
-            insertSql = 'insert into %s values (%s)'%(restructedTableName, ', '.join(['%s' for i in range(len(data))]))
-            self._cursor.execute(insertSql, data)
+            self.insert_data(restructedTableName, data)
             count += 1
             totalCount += 1
             if process < totalCount * 100 / totalNum:
@@ -77,7 +76,7 @@ class Sqlite3Client:
 
 if __name__ == '__main__':
     with Sqlite3Client('wcStorage.db') as s3c:
-        s3c.insert_data('message', items = [{'a':'a'},'a','a','a'])
+        s3c.insert_data('message', items = [str({'a':'a'}),'a:""','a','a'])
         r = s3c.data_source('select * from message')
         for item in r:
-            print type(eval(item[0]))
+            print item
