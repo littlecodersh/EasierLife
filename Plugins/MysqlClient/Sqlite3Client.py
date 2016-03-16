@@ -11,16 +11,18 @@ class Sqlite3Client:
         self._connection = sqlite3.connect(sqlDir)
         self._cursor = self._connection.cursor()
         self._storedDataSource = None
-    def execute(self, sql):
-        self._cursor.execute(sql)
+    def execute(self, sql, data = []):
+        self._cursor.execute(sql, data)
         self._connection.commit()
-    def query(self, sql):
-        self._cursor.execute(sql)
+    def query(self, sql, data = []):
+        self._cursor.execute(sql, data)
         return self._cursor.fetchall()
     def insert_data(self, tableName, items = []):
         self._cursor.execute('insert into %s values(%s)'%(tableName,
             ', '.join(['?' for i in items])), items)
         self._connection.commit()
+    # the following 4 functions don't use safe execute and may cause problems
+    # please make sure the input is safe before use them
     def restruct_table(self, tableName, orderBy, restructedTableName = None):
         if restructedTableName is None: restructedTableName = 'restructed_' + tableName
         orderByString = ', '.join(['%s %s'%(key[0], key[1]) for key in orderBy])
