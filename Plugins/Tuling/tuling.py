@@ -16,7 +16,7 @@ def get_response(msg, storageClass = None, userName = None, userid = 'ItChat'):
         'userid': userid,
     }
     try:
-        r = json.loads(requests.post(url, data = payloads).text)
+        r = requests.post(url, data = json.dumps(payloads)).json()
     except:
         return
     if not r['code'] in (100000, 200000, 302000, 308000, 313000, 314000): return
@@ -39,5 +39,5 @@ def get_response(msg, storageClass = None, userName = None, userid = 'ItChat'):
 
 if __name__ == '__main__':
     while True:
-        a = raw_input('>').decode(sys.stdin.encoding).encode('utf8')
+        a = raw_input('>').decode(sys.stdin.encoding)
         print get_response(a, 'ItChat')
