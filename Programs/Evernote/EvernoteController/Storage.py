@@ -14,7 +14,7 @@ import evernote.edam.notestore.NoteStore as NoteStore
 
 class Storage():
     storage = {}
-    def __init__(self, noteStore, token):
+    def __init__(self, token, noteStore):
         for nb in noteStore.listNotebooks():
             self.storage[nb.name] = {}
             self.storage[nb.name]['notebook'] = nb
@@ -24,30 +24,43 @@ class Storage():
             for ns in noteStore.findNotes(token, f, 0, 999).notes:
                 self.storage[nb.name]['notes'][ns.title] = ns
         self.defaultNotebook = noteStore.getDefaultNotebook(token).name
-    def create_note(self, note, notebookName):
-        if not notebookName: notebookName = self.defaultNotebook
+    def create_note(self, note, notebookName = None):
+        if notebookName is None: notebookName = self.defaultNotebook
         self.storage[notebookName]['notes'][note.title] = note
+        return True
     def create_notebook(self, notebook):
-        if self.storage.has_key(notebook.name): return
+        if self.storage.get(notebook.name) is None: return False
         self.storage[notebook.name] = {}
         self.storage[notebook.name]['notebook'] = notebook
         self.storage[notebook.name]['notes'] = {}
-    def move_note(self, fullNoteName, _to):
-        note = self.myfile(fullNoteName)
+        return True
+    def copy_note(self, fullNotePath, _to = None):
+        if _to is None: _to = self.defaultNotebook
+        note = self.get(fullNotePath)
+        if note is None: return False
         self.storage[_to]['notes'][note.title] = note
-        del self.storage[fullNoteName.split('/')[0]]['notes'][note.title]
-    def delete_note(self, fullNoteName):
-        del self.storage[fullNoteName.split('/')[0]]['notes'][fullNoteName.split('/')[1]]
+        return True
+    def move_note(self, fullNotePath, _to = None):
+        r = self.copy_note(fullNotePath, _to)
+        if r == False: return False
+        del self.storage[fullNotePath.split('/')[0]]['notes'][note.title]
+        return True
+    def delete_note(self, fullNotePath):
+        if self.get(fullNotePath) is None: return False
+        del self.storage[fullNotePath.split('/')[0]]['notes'][fullNotePath.split('/')[1]]
+        return True
     def delete_notebook(self, notebook):
+        if self.get(notebook) is None: return False
         del self.storage[notebook]
-    def myfile(self, s):
+        return True
+    def get(self, s):
         f = s.split('/')
-        if '/' in s:
-            return self.storage[f[0]]['notes'][f[1]]
-        else:
-            return self.storage[f[0]]['notebook']
+        r = self.storage.get(f[0])
+        if r is None: return
+        if '/' in s: return r['notes'].get(f[1])
+        return r.get('notebook')
     def show_notebook(self):
-            for bn, nb in self.storage.items(): print_line(bn)
+        for bn, nb in self.storage.items(): print_line(bn)
     def show_notes(self, notebook = None):
         for bn, nb in self.storage.items():
             if not notebook: print_line(bn + ':')
