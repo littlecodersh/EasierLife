@@ -11,10 +11,15 @@ import evernote.edam.notestore.NoteStore as NoteStore
 #         ...
 #     }
 # }
+# noteDictFormat: {
+# 'notebookName':[('note1', timeStamp), ..],
+# }
 
 class Storage():
     storage = {}
-    def __init__(self, token, noteStore):
+    def __init__(self):
+        self.available = False
+    def update(self, token, noteStore):
         for nb in noteStore.listNotebooks():
             self.storage[nb.name] = {}
             self.storage[nb.name]['notebook'] = nb
@@ -59,6 +64,13 @@ class Storage():
         if r is None: return
         if '/' in s: return r['notes'].get(f[1])
         return r.get('notebook')
+    def get_note_dict(self):
+        noteDict = {}
+        for nbName, nb in self.storage.iteritems():
+            noteDict[nbName] = []
+            for nName, n in nb['notes'].iteritems():
+                noteDict[nbName].append((nName, n.updated / 1000))
+        return noteDict
     def show_notebook(self):
         for bn, nb in self.storage.items(): print_line(bn)
     def show_notes(self, notebook = None):

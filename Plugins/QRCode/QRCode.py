@@ -1,9 +1,8 @@
 from PIL import Image 
-import sys, os
-import config
+import sys, os, platform
 
-QR_DIR = config.QR_DIR
-OS = config.OS
+QR_DIR = '.'
+OS = platform.uname()[0]
 BLOCK = '\xA1\xF6' if OS == 'Windows' else 'MM'
 
 class QRCode():
