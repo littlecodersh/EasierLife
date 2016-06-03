@@ -1,4 +1,4 @@
-__all__ = [ApiFramework]
+__all__ = ['ApiFramework']
 
 __API_LIST = {
     'document':{
