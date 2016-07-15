@@ -2,8 +2,14 @@ from PIL import Image
 import sys, os, platform
 
 QR_DIR = '.'
-OS = platform.uname()[0]
-BLOCK = 'MM'
+try:
+    b = u'\u2588'.encode(sys.stdin.encoding)
+    sys.stdout.write(b + '\r')
+    sys.stdout.flush()
+except:
+    BLOCK = 'MM'
+else:
+    BLOCK = b
 
 class QRCode():
     def __init__(self, fileName, size, padding = 0, background = 'BLACK'):
