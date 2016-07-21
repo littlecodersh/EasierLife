@@ -1,12 +1,12 @@
 from PIL import Image 
-import sys, os, platform
+import sys, os
 
 QR_DIR = '.'
 try:
-    b = u'\u2588'.encode(sys.stdin.encoding)
+    b = u'\u2588'
     sys.stdout.write(b + '\r')
     sys.stdout.flush()
-except:
+except UnicodeEncodeError:
     BLOCK = 'MM'
 else:
     BLOCK = b
@@ -23,15 +23,16 @@ class QRCode():
     def print_qr(self):
         sys.stdout.write(' '*50 + '\r')
         sys.stdout.flush()
-        print(self.white * (self.size + 2))
+        qr = self.white * (self.size + 2) + '\n'
         startPoint = self.padding + 0.5
         for y in range(self.size):
-            sys.stdout.write(self.white)
+            qr += self.white
             for x in range(self.size):
                 r,g,b = self.rgb.getpixel(((x + startPoint) * self.times, (y + startPoint) * self.times))
-                sys.stdout.write(self.white if r > 127 else self.black)
-            print(self.white)
-        print(self.white * (self.size + 2))
+                qr += self.white if r > 127 else self.black
+            qr += self.white + '\n'
+        qr += self.white * (self.size + 2) + '\n'
+        sys.stdout.write(qr)
 
 if __name__ == '__main__':
     # 37 is for picture size without padding, 3 is padding
