@@ -12,29 +12,26 @@ else:
     BLOCK = b
 
 class QRCode():
-    def __init__(self, fileName, size, padding = 0, background = 'BLACK'):
-        self.size = size
-        self.padding = padding
-        self.img = Image.open(fileName)
-        self.times = self.img.size[0]/(size + padding * 2)
-        self.rgb = self.img.convert('RGB')
-        self.white = BLOCK if background == 'BLACK' else '  '
-        self.black = '  ' if background == 'BLACK' else BLOCK 
-    def print_qr(self):
-        sys.stdout.write(' '*50 + '\r')
-        sys.stdout.flush()
-        qr = self.white * (self.size + 2) + '\n'
-        startPoint = self.padding + 0.5
-        for y in range(self.size):
-            qr += self.white
-            for x in range(self.size):
-                r,g,b = self.rgb.getpixel(((x + startPoint) * self.times, (y + startPoint) * self.times))
-                qr += self.white if r > 127 else self.black
-            qr += self.white + '\n'
-        qr += self.white * (self.size + 2) + '\n'
-        sys.stdout.write(qr)
+    pass
+def print_cmd_qr(fileDir, size = 37, padding = 3,
+        white = BLOCK, black = '  '):
+    img     = Image.open(fileDir)
+    times   = img.size[0] / (size + padding * 2)
+    rgb     = img.convert('RGB')
+    sys.stdout.write(' '*50 + '\r')
+    sys.stdout.flush()
+    qr = white * (size + 2) + '\n'
+    startPoint = padding + 0.5
+    for y in range(size):
+        qr += white
+        for x in range(size):
+            r,g,b = rgb.getpixel(((x + startPoint) * times, (y + startPoint) * times))
+            qr += white if r > 127 else black
+        qr += white + '\n'
+    qr += white * (size + 2) + '\n'
+    sys.stdout.write(qr)
 
 if __name__ == '__main__':
     # 37 is for picture size without padding, 3 is padding
-    q = QRCode(os.path.join(QR_DIR, 'QR.jpg'), 37, 3, 'BLACK')
-    q.print_qr()
+    # q = QRCode(os.path.join(QR_DIR, 'QR.jpg'), 37, 3, 'BLACK')
+    print_cmd_qr(os.path.join(QR_DIR, 'QR.jpg'))
