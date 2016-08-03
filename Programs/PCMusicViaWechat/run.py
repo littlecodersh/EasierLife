@@ -11,7 +11,7 @@ HELP_MSG = '''\
 
 @itchat.msg_register('Text')
 def music_player(msg):
-    if not msg['FromUserName'] == msg['ToUserName']: return
+    if msg['ToUserName'] != 'filehelper': return
     if msg['Text'] == u'关闭':
         close_music()
         return '音乐已关闭'
@@ -20,6 +20,6 @@ def music_player(msg):
     else:
         return interact_select_song(msg['Text'])
 
-itchat.auto_login()
+itchat.auto_login(True, enableCmdQR = True)
 itchat.send(HELP_MSG) 
 itchat.run()
