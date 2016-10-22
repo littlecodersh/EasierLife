@@ -38,6 +38,11 @@ def get_response(msg, storageClass = None, userName = None, userid = 'ItChat'):
         return '\n'.join([r['text'].replace('<br>','\n')])
 
 if __name__ == '__main__':
+    try:
+        ipt = raw_input
+        ipt = lambda: raw_input('>').decode(sys.stdin.encoding)
+    except:
+        ipt = lambda: input('>')
     while True:
-        a = raw_input('>').decode(sys.stdin.encoding)
-        print get_response(a, 'ItChat')
+        a = ipt()
+        print(get_response(a, 'ItChat'))
